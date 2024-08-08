@@ -17,7 +17,8 @@ class Converter():
 
         self.parser = parser.DATParser(dat_file)
 
-        self.coeffs = []
+        self.coeffs_CT = []
+        self.coeffs_CQ = []
 
         self.J_data = np.array([])
         self.CTs = np.array([])

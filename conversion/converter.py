@@ -4,9 +4,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class Converter():
-    def __init__(self, dat_file, desired_rpms=None) -> None:
+    def __init__(self, dat_file, prop_diameter, rho = 1.225, desired_rpms=None) -> None:
         self.convert_all = False
         self.desired_rpms = set()
+        self.D = prop_diameter # inches
+        self.rho = rho # kg/m^3
 
         if desired_rpms == None:
             self.convert_all = True
@@ -34,8 +36,8 @@ class Converter():
             thrusts = df['Thrust (N)'].values
 
 
-            rho = 1.225 
-            D = 15 * 0.0254
+            rho = self.rho 
+            D = self.D * 0.0254
 
             omega = int(rpm) * 2 * np.pi / 60.
 
@@ -56,8 +58,8 @@ class Converter():
 
             torques = df['Torque (N-m)'].values
 
-            rho = 1.225 
-            D = 15 * 0.0254
+            rho = self.rho 
+            D = self.D * 0.0254
 
             omega = int(rpm) * 2 * np.pi / 60.
 
@@ -104,7 +106,9 @@ class Converter():
 
 if __name__ == "__main__":
     dat_file = '../dat_files/PER3_15x55MR.dat'
-    converter = Converter(dat_file, [5000, 6000, 7000, 8000, 9000])
+    # Give the converter the dat_file path, the Diameter of the prop in inches,
+    # air density you want to use, and the desired RPMs to analyze.
+    converter = Converter(dat_file, 15, 1.225, [5000, 6000, 7000, 8000, 9000])
     converter.convert_CT()
     converter.convert_CQ()
     converter.plot_CT()
